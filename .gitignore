@@ -1,3 +1,6 @@
+# Project Data
+./configs/db.js
+
 # Logs
 logs
 *.log
