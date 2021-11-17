@@ -24,4 +24,4 @@ db.authenticate()
 
 module.exports = db;
 
-// qekjo sduhet me ardh te ti...
+// qekjo sduhet me ardh te ti... 2 2 2
