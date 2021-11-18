@@ -23,5 +23,3 @@ db.authenticate()
 .catch(err => console.log(err))
 
 module.exports = db;
-
-// qekjo sduhet me ardh te ti... 2 2 2
