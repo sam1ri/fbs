@@ -4,7 +4,7 @@ const Sequelize = require('sequelize')
 const db = new Sequelize('FBS_DB','sam', 'Samiri123', {
 //onlineserver
 //  const db = new Sequelize('services_hms','services_user','4vsXoNtOj4i(', {
-         host: 'localhost',
+         host: '192.168.3.145',
          dialect: 'mssql',
          port: 59565,
          pool: {
@@ -16,12 +16,10 @@ const db = new Sequelize('FBS_DB','sam', 'Samiri123', {
          define: {
              freezeTableName: true
          },
-         logging: false
+         logging: false 
      })
 db.authenticate()
 .then(() => console.log("Database state: Connected "))
 .catch(err => console.log(err))
 
 module.exports = db;
-
-// qekjo sduhet me ardh te ti... 2 2 2
