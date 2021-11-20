@@ -3,10 +3,10 @@ const router = express.Router();
 const db = require('../configs/db');
 
 router.get('/single', (req,res) => {
-// returns a single user
+// returns a single seat
 
-    db.query('EXEC SelectUser :UserId',
-    {replacements: { UserId: req.query.userId }})
+    db.query('EXEC SelectSeat :SeatId',
+    {replacements: { SeatId: req.query.seatId }})
         .then(data => {
             res.json({data: data});
         })
@@ -16,16 +16,13 @@ router.get('/single', (req,res) => {
 })
 
 router.get('/search', (req,res) => {
-// returns a list of users
+// returns a list of seats
 
-    let query = 'EXEC SearchUsers '
+    let query = 'EXEC SearchSeats '
     const replacements = {}
     if(req.query.name != undefined) {query += ':Name, '; replacements.Name = req.query.name }
-    if(req.query.surname != undefined) {query += ':Surname, '; replacements.Surname = req.query.surname }
-    if(req.query.email != undefined) {query += ':Email, '; replacements.Email = req.query.email }
-    if(req.query.roleId != undefined) {query += ':RoleId, '; replacements.RoleId = req.query.roleId }
-
-    // EXEC SearchUsers :Name, :Surname,
+    if(req.query.airplaneId != undefined) {query += ':AirplaneId, '; replacements.AirplaneId = req.query.airplaneId }
+    if(req.query.categoryId != undefined) {query += ':CategoryId, '; replacements.CategoryId = req.query.categoryId }
 
     db.query(query, 
     {replacements: replacements})
@@ -39,10 +36,10 @@ router.get('/search', (req,res) => {
 })
 
 router.post('/create', (req, res) => {
-// creates a new user
+// creates a new seat
 
-    db.query('EXEC CreateUser :Name, :Surname, :Email, :RoleId, :Password', 
-    {replacements: { Name: req.body.name, Surname: req.body.surname, Email: req.body.email, RoleId: req.body.roleId, Password: req.body.password}})
+    db.query('EXEC CreateSeat :Name, :AirplaneId, :CategoryId', 
+    {replacements: { Name: req.body.name, AirplaneId: req.body.airplaneId, CategoryId: req.body.categoryId}})
         .then(data => {
             res.json({msg: 'Success'});
         })
@@ -53,10 +50,10 @@ router.post('/create', (req, res) => {
 })
 
 router.put('/update', (req, res) => {
-// updates a single user
+// updates a single seat
     
-    db.query('EXEC UpdateUser :Name, :Surname, :Email, :RoleId, :Password', 
-    {replacements: { Name: req.body.name, Surname: req.body.surname, Email: req.body.email, RoleId: req.body.roleId, Password: req.body.password}})
+    db.query('EXEC UpdateSeat :SeatId, :Name, :AirplaneId, :CategoryId', 
+    {replacements: { SeatId: req.body.seatId, Name: req.body.name, AirplaneId: req.body.airplaneId, CategoryId: req.body.categoryId}})
         .then(data => {
             res.json({msg: 'Success'});
         })
@@ -67,10 +64,10 @@ router.put('/update', (req, res) => {
 })
 
 router.delete('/delete', (req,res) => {
-    // deletes a single ticket
+// deletes a single seat
     
-    db.query('EXEC DeleteUser :UserId',
-    {replacements: { UserId: req.query.userId }})
+    db.query('EXEC DeleteSeat :SeatId',
+    {replacements: { SeatId: req.query.seatId }})
         .then(data => {
             res.json({msg: 'Success'});
         })

@@ -3,10 +3,10 @@ const router = express.Router();
 const db = require('../configs/db');
 
 router.get('/single', (req,res) => {
-// returns a single user
+// returns a single bagage
 
-    db.query('EXEC SelectUser :UserId',
-    {replacements: { UserId: req.query.userId }})
+    db.query('EXEC SelectBagage :BagageId',
+    {replacements: { BagageId: req.query.babageId }})
         .then(data => {
             res.json({data: data});
         })
@@ -16,20 +16,16 @@ router.get('/single', (req,res) => {
 })
 
 router.get('/search', (req,res) => {
-// returns a list of users
+// returns a list of bagages
 
-    let query = 'EXEC SearchUsers '
+    let query = 'EXEC SearchBagages '
     const replacements = {}
-    if(req.query.name != undefined) {query += ':Name, '; replacements.Name = req.query.name }
-    if(req.query.surname != undefined) {query += ':Surname, '; replacements.Surname = req.query.surname }
-    if(req.query.email != undefined) {query += ':Email, '; replacements.Email = req.query.email }
-    if(req.query.roleId != undefined) {query += ':RoleId, '; replacements.RoleId = req.query.roleId }
-
-    // EXEC SearchUsers :Name, :Surname,
+    if(req.query.mass != undefined) {query += ':Mass, '; replacements.Mass = req.query.mass }
+    if(req.query.pricePercentage != undefined) {query += ':PricePercentage, '; replacements.PricePercentage = req.query.pricePercentage }
 
     db.query(query, 
     {replacements: replacements})
-        .then(data => {
+        .then(data   => {
             res.json({data: data});
         })
         .catch(err => {
@@ -39,10 +35,10 @@ router.get('/search', (req,res) => {
 })
 
 router.post('/create', (req, res) => {
-// creates a new user
+// creates a new bagage
 
-    db.query('EXEC CreateUser :Name, :Surname, :Email, :RoleId, :Password', 
-    {replacements: { Name: req.body.name, Surname: req.body.surname, Email: req.body.email, RoleId: req.body.roleId, Password: req.body.password}})
+    db.query('EXEC CreateBagage :Mass, :PricePercentage', 
+    {replacements: { Mass: req.body.mass, PricePercentage: req.body.pricePercentage}})
         .then(data => {
             res.json({msg: 'Success'});
         })
@@ -53,10 +49,10 @@ router.post('/create', (req, res) => {
 })
 
 router.put('/update', (req, res) => {
-// updates a single user
+// updates a single bagage
     
-    db.query('EXEC UpdateUser :Name, :Surname, :Email, :RoleId, :Password', 
-    {replacements: { Name: req.body.name, Surname: req.body.surname, Email: req.body.email, RoleId: req.body.roleId, Password: req.body.password}})
+    db.query('EXEC UpdateBagage :BagageId, :Mass, :PricePercentage', 
+    {replacements: { BagageId: req.body.babageId, Mass: req.body.mass, PricePercentage: req.body.pricePercentage}})
         .then(data => {
             res.json({msg: 'Success'});
         })
@@ -67,10 +63,10 @@ router.put('/update', (req, res) => {
 })
 
 router.delete('/delete', (req,res) => {
-    // deletes a single ticket
+// deletes a single bagage
     
-    db.query('EXEC DeleteUser :UserId',
-    {replacements: { UserId: req.query.userId }})
+    db.query('EXEC DeleteBagage :BagageId',
+    {replacements: { BagageId: req.query.bagageId }})
         .then(data => {
             res.json({msg: 'Success'});
         })
