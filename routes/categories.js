@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router();
-const db = require('../configs/db');
+const db = require('../config/db');
 
 router.get('/single', (req,res) => {
 // returns a single category

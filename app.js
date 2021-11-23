@@ -2,12 +2,14 @@ const express = require('express');
 const app = express();
 const _PORT = 3000;
 const cors = require('cors')
+const auth = require("./middleware/auth");
 
 // dependencies
 app.use(cors())
 
-app.get('/', (req,res) => {
-    res.json({msg:'Welcome to FBS Air API!'})
+app.get('/', auth, (req,res) => {
+    //res.json({msg:'Welcome to FBS Air API!'})
+    res.status(200).send("Welcome 🙌 ");
 })
 
 // routes
