@@ -1,5 +1,5 @@
 # Project Data
-configs/db.js
+config/db.js
 
 # Logs
 logs
