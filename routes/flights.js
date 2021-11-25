@@ -21,11 +21,12 @@ router.get('/search', (req,res) => {
 
     let query = 'EXEC SearchFlights '
     const replacements = {}
-    if(req.query.departureId != undefined) {query += ':DepartureId, '; replacements.DepartureId = req.query.departureId }
-    if(req.query.arrivalId != undefined) {query += ':ArrivalId, '; replacements.ArrivalId = req.query.arrivalId }
-    if(req.query.date != undefined) {query += ':Date, '; replacements.Date = req.query.date }
+    if(req.query.departureId != undefined) {query += ':DepartureId'; replacements.DepartureId = req.query.departureId }
+    if(req.query.arrivalId != undefined) {query += ', :ArrivalId '; replacements.ArrivalId = req.query.arrivalId }
+    if(req.query.date != undefined) {query += ', :Date'; replacements.Date = req.query.date }
     
     console.log(query)
+    console.log(replacements)
     
     db.query(query, 
     {replacements: replacements})
@@ -33,8 +34,10 @@ router.get('/search', (req,res) => {
             res.json({data: data});
         })
         .catch(err => {
-            res.statusMessage = "Something went wrong!";
-            res.status(503).end();
+            res.json(err)
+            // res.statusMessage = "Something went wrong!";
+            // res.status(503).end();
+            
         })
 
 })
