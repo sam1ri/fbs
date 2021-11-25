@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const _PORT = 3000;
+const _PORT = 8000;
 const cors = require('cors')
 
 // dependencies
