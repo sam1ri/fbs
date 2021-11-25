@@ -27,6 +27,20 @@ router.get('/all', (req,res) => {
         })
 })
 
+router.get('/search', (req,res) => {
+// returns all locations
+    console.log(req.query)
+    db.query('EXEC SearchLocations :queryname', 
+    {replacements: { queryname: req.query.name}})
+        .then(data => {
+            res.json({data: data});
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong!";
+            res.status(503).end();
+        })
+})
+
 router.post('/create', (req, res) => {
 // creates a new location
 

@@ -19,15 +19,24 @@ router.get('/single', (req,res) => {
 router.get('/search', (req,res) => {
 // returns a list of flights
 
-    db.query('EXEC SearchFlights :DepartureId, :ArrivalId, :Date', 
-    {replacements: { DepartureId: req.query.departureId, ArrivalId: req.query.arrivalId, Date: req.query.date, }})
-        .then(data => {
+    let query = 'EXEC SearchFlights '
+    const replacements = {}
+    if(req.query.departureId != undefined) {query += ':DepartureId, '; replacements.DepartureId = req.query.departureId }
+    if(req.query.arrivalId != undefined) {query += ':ArrivalId, '; replacements.ArrivalId = req.query.arrivalId }
+    if(req.query.date != undefined) {query += ':Date, '; replacements.Date = req.query.date }
+    
+    console.log(query)
+    
+    db.query(query, 
+    {replacements: replacements})
+        .then(data   => {
             res.json({data: data});
         })
         .catch(err => {
             res.statusMessage = "Something went wrong!";
             res.status(503).end();
         })
+
 })
 
 router.post('/create', (req, res) => {
