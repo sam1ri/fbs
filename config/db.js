@@ -1,12 +1,12 @@
 const Sequelize = require('sequelize')
 
 //localserver
-const db = new Sequelize('FBS_DB','sam', 'Samiri123', {
+const db = new Sequelize('FBS_DB','rr', 'rr', {
 //onlineserver
 //  const db = new Sequelize('services_hms','services_user','4vsXoNtOj4i(', {
-         host: '192.168.3.145',
+         host: 'localhost',
          dialect: 'mssql',
-         port: 59565,
+         port: 1434,
          pool: {
              min: 0,
              max: 5,

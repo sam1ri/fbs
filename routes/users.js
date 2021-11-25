@@ -38,7 +38,7 @@ router.get('/search', (req,res) => {
             res.status(503).end();
         })
 })
-
+/*
 // creates a new user
 router.post('/create', (req, res) => {
 
@@ -138,7 +138,7 @@ router.post('/login', (req,res) => {
         console.log(err);
       }
 })
-
+*/
 // updates a single user
 router.put('/update', (req, res) => {    
 
