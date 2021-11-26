@@ -6,34 +6,40 @@ router.get('/single', (req,res) => {
 // returns a single ticket
 
     db.query('EXEC SelectTicket :TicketId',
-    {replacements: { TicketId: req.query.ticketId }})
+    {replacements: { TicketId: req.query.ticketId }, logging: console.log})
         .then(data => {
             res.json({data: data});
         })
         .catch(err => {
-            res.json(err)
+            console.log(err)
+            res.statusMessage = "Something went wrong!";
+            res.status(503).end();
         })
 })
 
 router.get('/search', (req,res) => {
 // returns a list of tickets
 
-    let query = 'EXEC SelectTickets '
-    const replacements = {}
-    if(req.query.pasangerId != undefined) {query += ':PasangerId,'; replacements.PasangerId = req.query.pasangerId }
-    if(req.query.pasangerId != undefined) {query += ':FlightId,'; replacements.FlightId = req.query.flightId }
-    if(req.query.pasangerId != undefined) {query += ':SeatId,'; replacements.SeatId = req.query.seatId }
-    if(req.query.pasangerId != undefined) {query += ':BagageId,'; replacements.BagageId = req.query.bagageId }
-    if(req.query.pasangerId != undefined) {query += ':Price,'; replacements.Price = req.query.price }
+    let query = 'EXEC SearchTickets ';
+    const { pasangerId, flightId, seatId, bagageId, price } = req.query;
+    query += `:PasangerId, :FlightId, :SeatId, :BagageId, :Price `
+    let replacements = {
+        PasangerId: pasangerId == undefined ? null : pasangerId,
+        FlightId: flightId == undefined ? null : flightId,
+        SeatId: seatId == undefined ? null : seatId,
+        BagageId: bagageId == undefined ? null : bagageId,
+        Price: price == undefined ? null : price
+    }
 
-    db.query(query, 
-    {replacements: replacements})
+    db.query(query,
+    {replacements: replacements, logging: console.log})
         .then(data => {
-            console.log(req.query.pasangerId)
             res.json({data: data});
         })
         .catch(err => {
-            res.json(err)
+            console.log(err)
+            res.statusMessage = "Something went wrong!";
+            res.status(503).end();
         })
 })
 
@@ -41,25 +47,29 @@ router.post('/create', (req, res) => {
 // creates a new ticket
 
     db.query('EXEC CreateTicket :PasangerId, :FlightId, :SeatId, :BagageId, :Price', 
-    {replacements: { PasangerId: req.body.pasangerId, FlightId: req.body.flightId, SeatId: req.body.seatId, BagageId: req.body.bagageId, Price: req.body.price}})
+    {replacements: { PasangerId: req.body.pasangerId, FlightId: req.body.flightId, SeatId: req.body.seatId, BagageId: req.body.bagageId, Price: req.body.price }, logging: console.log})
         .then(data => {
             res.json({msg: 'Success'});
         })
         .catch(err => {
-            res.json(err)
+            console.log(err)
+            res.statusMessage = "Something went wrong!";
+            res.status(503).end();
         })
 })
 
 router.put('/update', (req, res) => {
 // updates a single ticket
     
-    db.query('EXEC UpdateTicket :PasangerId, :FlightId, :SeatId, :BagageId, :Price', 
-    {replacements: { LinjaId: req.body.linjaId, AeroplaniId: req.body.AeroplaniId, DataNisjes: req.body.dataNisjes, DataMberritjes: req.body.dataMberritjes, CmimiFluturimit: req.body.cmimiFluturimit  }})
+    db.query('EXEC UpdateTicket :TicketId, :PasangerId, :FlightId, :SeatId, :BagageId, :Price', 
+    {replacements: { TicketId: req.body.ticketId, PasangerId: req.body.pasangerId, FlightId: req.body.flightId, SeatId: req.body.seatId, BagageId: req.body.bagageId, Price: req.body.price }, logging: console.log})
         .then(data => {
             res.json({msg: 'Success'});
         })
         .catch(err => {
-            res.json(err)
+            console.log(err)
+            res.statusMessage = "Something went wrong!";
+            res.status(503).end();
         })
 })
 
@@ -67,12 +77,14 @@ router.delete('/delete', (req,res) => {
     // deletes a single ticket
     
     db.query('EXEC DeleteTicket :TicketId',
-    {replacements: { TicketId: req.query.ticketId }})
+    {replacements: { TicketId: req.body.ticketId }, logging: console.log})
         .then(data => {
             res.json({msg: 'Success'});
         })
         .catch(err => {
-            res.json(err)
+            console.log(err)
+            res.statusMessage = "Something went wrong!";
+            res.status(503).end();
         })
 })
 

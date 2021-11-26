@@ -5,6 +5,7 @@ const db = new Sequelize('FBS_DB','rr', 'rr', {
 //onlineserver
 //  const db = new Sequelize('services_hms','services_user','4vsXoNtOj4i(', {
          host: 'localhost',
+         loggin: console.log,
          dialect: 'mssql',
          port: 1434,
          pool: {
