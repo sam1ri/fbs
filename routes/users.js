@@ -3,37 +3,41 @@ const router = express.Router();
 const db = require('../config/db');
 require("dotenv").config();
 
-// returns a single user
 router.get('/single', (req,res) => {
+// returns a single user
 
     db.query('EXEC SelectUser :UserId',
-    {replacements: { UserId: req.query.userId }})
+    {replacements: { UserId: req.query.userId }, logging: console.log})
         .then(data => {
             res.json({data: data});
         })
         .catch(err => {
-            res.json(err)
+            console.log(err)
+            res.statusMessage = "Something went wrong!";
+            res.status(503).end();
         })
 })
 
-// returns a list of users
 router.get('/search', (req,res) => {
+// returns a list of users
 
-    let query = 'EXEC SearchUsers '
-    const replacements = {}
-    if(req.query.name != undefined) {query += ':Name, '; replacements.Name = req.query.name }
-    if(req.query.surname != undefined) {query += ':Surname, '; replacements.Surname = req.query.surname }
-    if(req.query.email != undefined) {query += ':Email, '; replacements.Email = req.query.email }
-    if(req.query.roleId != undefined) {query += ':RoleId, '; replacements.RoleId = req.query.roleId }
+    let query = 'EXEC SearchUsers ';
+    const { name, surname, email, roleId } = req.query;
+    query += `:Name, :Surname, :Email, :RoleId`
+    let replacements = {
+        Name: name == undefined ? null : name,
+        Surname: surname == undefined ? null : surname,
+        Email: email == undefined ? null : email,
+        RoleId: roleId == undefined ? null : roleId
+    }
 
-    // EXEC SearchUsers :Name, :Surname,
-
-    db.query(query, 
-    {replacements: replacements})
+    db.query(query,
+    {replacements: replacements, logging: console.log})
         .then(data => {
             res.json({data: data});
         })
         .catch(err => {
+            console.log(err)
             res.statusMessage = "Something went wrong!";
             res.status(503).end();
         })
@@ -60,6 +64,7 @@ router.post('/create', (req, res) => {
                 return res.status(409).send("User Already Exist. Please Login");
         })
         .catch(err => {
+            console.log(err)
             res.statusMessage = "Something went wrong!";
             res.status(503).end();
         })
@@ -83,6 +88,7 @@ router.post('/create', (req, res) => {
             res.json({msg: 'Success'});
         })
         .catch(err => {
+            console.log(err)
             res.statusMessage = "Something went wrong!";
             res.status(503).end();
         })
@@ -142,12 +148,13 @@ router.post('/login', (req,res) => {
 // updates a single user
 router.put('/update', (req, res) => {    
 
-    db.query('EXEC UpdateUser :Name, :Surname, :Email, :RoleId, :Password', 
-    {replacements: { Name: req.body.name, Surname: req.body.surname, Email: req.body.email, RoleId: req.body.roleId, Password: req.body.password}})
+    db.query('EXEC UpdateUser :UserId, :Name, :Surname, :Email, :RoleId, :Password', 
+    {replacements: { UserId: req.body.userId, Name: req.body.name, Surname: req.body.surname, Email: req.body.email, RoleId: req.body.roleId, Password: req.body.password}})
         .then(data => {
             res.json({msg: 'Success'});
         })
         .catch(err => {
+            console.log(err)
             res.statusMessage = "Something went wrong!";
             res.status(503).end();
         })
@@ -162,6 +169,7 @@ router.delete('/delete', (req,res) => {
             res.json({msg: 'Success'});
         })
         .catch(err => {
+            console.log(err)
             res.statusMessage = "Something went wrong!";
             res.status(503).end();
         })
