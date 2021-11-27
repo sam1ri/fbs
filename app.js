@@ -13,6 +13,7 @@ app.get('/', auth, (req,res) => {
 })
 */
 // routes
+app.use(express.json());
 const airplanes = require('./routes/airplanes');
 const bagages = require('./routes/bagages');
 const seats = require('./routes/seats');
