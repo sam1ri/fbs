@@ -36,7 +36,7 @@ router.get('/search', (req,res) => {
 // returns a list of locations locations
 
     db.query('EXEC SearchLocations :queryname', 
-    {replacements: { queryname: req.query.name}, logging: console.log})
+    {replacements: { queryname: req.query.name}, logging: console.log, nest: true},)
         .then(data => {
             
             res.json({data: data});
