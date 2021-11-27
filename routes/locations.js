@@ -29,10 +29,21 @@ router.get('/all', (req,res) => {
 
 router.get('/search', (req,res) => {
 // returns all locations
-    console.log(req.query)
+
+    if(req.query.name == ''){
+        return res.json({data: []})
+    }
+
     db.query('EXEC SearchLocations :queryname', 
-    {replacements: { queryname: req.query.name}})
+    {
+        nest: true,
+        replacements: { 
+            queryname: req.query.name
+        },
+        
+    })
         .then(data => {
+            
             res.json({data: data});
         })
         .catch(err => {
