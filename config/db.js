@@ -20,7 +20,7 @@ const db = new Sequelize('FBS_DB','sam', 'Samiri123', {
          logging: false 
      })
 db.authenticate()
-.then(() => console.log("Database state: Connected "))
+.then(() => console.log("Database state: \tConnected "))
 .catch(err => console.log(err))
 
 module.exports = db;

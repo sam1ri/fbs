@@ -3,6 +3,8 @@ const express = require('express')
 const router = express.Router();
 const db = require('../config/db');
 
+const controller = require('../middleware/controller')
+
 router.get('/single', (req,res) => {
 // returns a single flight
 
@@ -14,12 +16,18 @@ router.get('/single', (req,res) => {
         .catch(err => {
             console.log(err)
             res.statusMessage = "Something went wrong!";
-            res.status(503).end();
+            res.status(400).end();
         })
 })
 
-router.get('/search', (req,res) => {
+router.get('/search', controller.isCustomer, (req,res) => {
 // returns a list of flights
+
+// if(req.query.departureId == null || req.query.arivalId == null){
+//     res.status == 404;
+//     res.statusMessage = 'No flight found!';
+//     res.json([])
+// }
 
     let query = 'EXEC SearchFlights ';
     const { departureId, arrivalId, date } = req.query;
@@ -31,14 +39,14 @@ router.get('/search', (req,res) => {
     }
 
     db.query(query,
-    {replacements: replacements, logging: console.log})
+    {replacements: replacements, logging: console.log, nest: true})
         .then(data => {
             res.json({data: data});
         })
         .catch(err => {
             console.log(err)
             res.statusMessage = "Something went wrong!";
-            res.status(503).end();
+            res.status(400).end();
         })
 })
 
@@ -53,7 +61,7 @@ router.post('/create', (req, res) => {
         .catch(err => {
             console.log(err)
             res.statusMessage = "Something went wrong!";
-            res.status(503).end();
+            res.status(400).end();
         })
 })
 
@@ -68,7 +76,7 @@ router.put('/update', (req, res) => {
         .catch(err => {
             console.log(err)
             res.statusMessage = "Something went wrong!";
-            res.status(503).end();
+            res.status(400).end();
         })
         
 })

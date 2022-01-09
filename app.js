@@ -24,6 +24,7 @@ const users = require('./routes/users');
 const categories = require('./routes/categories');
 const locations = require('./routes/locations');
 const roles = require('./routes/roles');
+const authentication = require('./routes/authentication');
 
 // use routes defined above
 app.use('/flights', flights);
@@ -36,8 +37,9 @@ app.use('/airplanes', airplanes);
 app.use('/bagages', bagages);
 app.use('/seats', seats);
 app.use('/roles', roles);
+app.use('/authentication', authentication);
 
 // connection listner
 app.listen(_PORT, () => {
-    console.log('Connection Successful!')
+    console.log('Connection state: \tConnected')
 })

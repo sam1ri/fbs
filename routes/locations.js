@@ -33,10 +33,11 @@ router.get('/all', (req,res) => {
 })
 
 router.get('/search', (req,res) => {
-// returns a list of locations locations
-
-    db.query('EXEC SearchLocations :queryname', 
-    {replacements: { queryname: req.query.name}, logging: console.log, nest: true},)
+// returns a list of locations
+    if(req.query.name == ''){
+        res.json({data: []})
+    }
+    db.query('EXEC SearchLocations :queryname', {replacements: { queryname: req.query.name}, logging: console.log, nest: true},)
         .then(data => {
             
             res.json({data: data});
