@@ -7,9 +7,8 @@ const controller = require('../middleware/controller')
 
 router.get('/single', (req,res) => {
 // returns a single flight
-
     db.query('EXEC SelectFlight :FlightId',
-    {replacements: { FlightId: req.query.flightId }, logging: console.log})
+    {replacements: { FlightId: req.query.flightId }, logging: console.log, nest: true})
         .then(data => {
             res.json({data: data});
         })
