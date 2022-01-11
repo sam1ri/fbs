@@ -1,6 +1,23 @@
+const { v4: uuidv4 } = require('uuid');
+const qrcodegen = require('../services/qr-generator')
+
 const express = require('express')
 const router = express.Router();
 const db = require('../config/db');
+
+router.get('/verify', (req,res) => {
+    // returns a single ticket
+        db.query('EXEC VerifyTicket :Uuid',
+        {replacements: { Uuid: req.query.uuid }, logging: console.log})
+            .then(data => {
+                res.json({msg: valid});
+            })
+            .catch(err => {
+                console.log(err)
+                res.statusMessage = "Not valid!";
+                res.status(404).end();
+            })
+    })
 
 router.get('/single', (req,res) => {
 // returns a single ticket
@@ -46,10 +63,13 @@ router.get('/search', (req,res) => {
 router.post('/create', (req, res) => {
 // creates a new ticket
 
-    db.query('EXEC CreateTicket :PasangerId, :FlightId, :SeatId, :BagageId, :Price', 
-    {replacements: { PasangerId: req.body.pasangerId, FlightId: req.body.flightId, SeatId: req.body.seatId, BagageId: req.body.bagageId, Price: req.body.price }, logging: console.log})
+    const uuid = uuidv4();
+    const data = `localhost:8000/tickets/verify?uuid=${uuid}`;
+    console.log(data)
+    db.query('EXEC CreateTicket :PasangerId, :FlightId, :SeatId, :BagageId, :Price, :Uuid', 
+    {replacements: { PasangerId: req.body.pasangerId, FlightId: req.body.flightId, SeatId: req.body.seatId, BagageId: req.body.bagageId, Price: req.body.price, Uuid:uuid }, logging: console.log})
         .then(data => {
-            res.json({msg: 'Success'});
+            qrcodegen(data, req, res)
         })
         .catch(err => {
             console.log(err)
