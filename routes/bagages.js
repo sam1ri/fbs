@@ -17,6 +17,21 @@ router.get('/single', (req,res) => {
         })
 })
 
+router.get('/all', (req,res) => {
+    // returns a single bagage
+    
+        db.query('EXEC SelectAllBagages',
+        {logging: console.log, nest: true})
+            .then(data => {
+                res.json({data: data});
+            })
+            .catch(err => {
+                console.log(err)
+                res.statusMessage = "Something went wrong!";
+                res.status(503).end();
+            })
+    })
+
 router.get('/search', (req,res) => {
 // returns a list of bagages
 
