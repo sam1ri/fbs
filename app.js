@@ -38,6 +38,7 @@ app.use('/bagages', bagages);
 app.use('/seats', seats);
 app.use('/roles', roles);
 app.use('/authentication', authentication);
+app.use(express.static('./qrcode'))
 
 // connection listner
 app.listen(_PORT, () => {

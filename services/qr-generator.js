@@ -1,6 +1,7 @@
 const QRCode = require('qrcode');
  // string
 
+    //let data = req.query.data;
     // QRCode.toDataURL(data, (err, src) => {
     //     if(err){
     //         res.json({err: err})
@@ -10,17 +11,15 @@ const QRCode = require('qrcode');
     //         res.json({QRCode: src, urlImage: ImageSaved});
     //     }
     // });
-    
-
-const generateQRCode = (data, req) => {
+const qrcodegen = (data,req,res) => {
     let QRName = `QR_${new Date().getTime()}.png`;
     QRCode.toFile(`./qrcode/${QRName}`,data, {color: {dark: '#000',light: '#fff'}}, (err) => {
         if(err){
-                console.log(err);
-            }
-            var ImageSaved = req.protocol + '://' + req.get('host') + '/' + QRName;
-                return {urlImage: ImageSaved};
-        })
+            console.log(err);
+        }
+        var ImageSaved = req.protocol + '://' + req.get('host') + '/' + QRName;
+        return res.json({urlImage: ImageSaved});
+    })
 }
 
-module.exports = generateQRCode;
+module.exports = qrcodegen;

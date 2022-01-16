@@ -27,6 +27,7 @@
     "nodemon": "^2.0.15",
     "qrcode": "^1.5.0",
     "sequelize": "^6.9.0",
-    "tedious": "^14.0.0"
+    "tedious": "^14.0.0",
+    "uuid": "^8.3.2"
   }
 }
