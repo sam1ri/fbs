@@ -47,7 +47,7 @@ router.get('/calculate-price', (req,res) => {
 
 router.get('/search', (req,res) => {
 // returns a list of flights
-console.log(qrgen("Samir Maliqi 123 123", req))
+// console.log(qrgen("Samir Maliqi 123 123", req))
 
 // if(req.query.departureId == null || req.query.arivalId == null){
 //     res.status == 404;

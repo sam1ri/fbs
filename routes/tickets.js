@@ -5,6 +5,7 @@ const express = require('express')
 const router = express.Router();
 const db = require('../config/db');
 const qrgen = require('../services/qr-generator')
+const controller = require('../middleware/controller')
 
 router.get('/verify', (req,res) => {
     // returns a single ticket
@@ -16,7 +17,7 @@ router.get('/verify', (req,res) => {
             .catch(err => {
                 console.log(err)
                 res.statusMessage = "Not valid!";
-                res.status(404).end();
+                res.status(400).end();
             })
     })
 
@@ -60,7 +61,7 @@ router.get('/search', (req,res) => {
         })
 })
 
-router.post('/create', (req, res) => {
+router.post('/create', controller.isCustomer, (req, res) => {
 // creates a new ticket
 
     const uuid = uuidv4();
@@ -72,7 +73,6 @@ router.post('/create', (req, res) => {
             qrcodegen(data, req, res)
         })
         .catch(err => {
-            console.log(err)
             res.statusMessage = "Something went wrong!";
             res.status(503).end();
         })
